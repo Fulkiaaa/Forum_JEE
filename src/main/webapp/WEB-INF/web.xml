@@ -2,12 +2,9 @@
 <web-app id="WebApp_ID" version="2.4" xmlns="http://java.sun.com/xml/ns/j2ee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd">
 	<display-name>Forum_JEE</display-name>
 	<welcome-file-list>
-		<welcome-file>index.html</welcome-file>
-		<welcome-file>index.htm</welcome-file>
-		<welcome-file>index.jsp</welcome-file>
-		<welcome-file>default.html</welcome-file>
-		<welcome-file>default.htm</welcome-file>
-		<welcome-file>default.jsp</welcome-file>
+		<welcome-file>connection.html</welcome-file>
+		<welcome-file>connection.htm</welcome-file>
+		<welcome-file>connection.jsp</welcome-file>
 	</welcome-file-list>
 	
 	
@@ -30,16 +27,26 @@
         <servlet-name>ConnectionServlet</servlet-name>
         <url-pattern>/connection</url-pattern>
     </servlet-mapping>
-
-		
+    
     <servlet>
-        <servlet-name>AccueilServlet</servlet-name>
-        <servlet-class>servlets.AccueilServlet</servlet-class>
+        <servlet-name>SujetServlet</servlet-name>
+        <servlet-class>servlets.SujetServlet</servlet-class>
     </servlet>
 
     <servlet-mapping>
-        <servlet-name>AccueilServlet</servlet-name>
-        <url-pattern>/accueil</url-pattern>
+        <servlet-name>SujetServlet</servlet-name>
+        <url-pattern>/sujet</url-pattern>
     </servlet-mapping>
+    
+    <servlet>
+	    <servlet-name>CreationMessageServlet</servlet-name>
+	    <servlet-class>servlets.CreationMessageServlet</servlet-class>
+	</servlet>
+	
+	<servlet-mapping>
+	    <servlet-name>CreationMessageServlet</servlet-name>
+	    <url-pattern>/ajoutMessage</url-pattern>
+	</servlet-mapping>
+
     
 </web-app>
