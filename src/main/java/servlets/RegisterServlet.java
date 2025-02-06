@@ -6,6 +6,7 @@ import jakarta.servlet.http.*;
 import java.io.*;
 import java.sql.*;
 
+@SuppressWarnings("serial")
 public class RegisterServlet extends HttpServlet {
     
     @Override
