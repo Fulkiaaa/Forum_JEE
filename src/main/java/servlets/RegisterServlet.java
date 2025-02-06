@@ -8,7 +8,12 @@ import java.sql.*;
 
 public class RegisterServlet extends HttpServlet {
     
-    @Override
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+	@Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         // Récupérer les données du formulaire
         String username = request.getParameter("username");

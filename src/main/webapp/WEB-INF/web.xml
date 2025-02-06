@@ -20,6 +20,16 @@
         <servlet-name>RegisterServlet</servlet-name>
         <url-pattern>/register</url-pattern>
     </servlet-mapping>
-	
-	
+
+		
+    <servlet>
+        <servlet-name>AccueilServlet</servlet-name>
+        <servlet-class>servlets.AccueilServlet</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>AccueilServlet</servlet-name>
+        <url-pattern>/accueil</url-pattern>
+    </servlet-mapping>
+    
 </web-app>
