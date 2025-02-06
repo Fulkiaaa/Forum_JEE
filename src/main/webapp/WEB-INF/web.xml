@@ -11,7 +11,7 @@
 	</welcome-file-list>
 	
 	
-	 <servlet>
+	<servlet>
         <servlet-name>RegisterServlet</servlet-name>
         <servlet-class>servlets.RegisterServlet</servlet-class>
     </servlet>
@@ -20,6 +20,26 @@
         <servlet-name>RegisterServlet</servlet-name>
         <url-pattern>/register</url-pattern>
     </servlet-mapping>
-	
-	
+
+	<servlet>
+        <servlet-name>ConnectionServlet</servlet-name>
+        <servlet-class>servlets.ConnectionServlet</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>ConnectionServlet</servlet-name>
+        <url-pattern>/connection</url-pattern>
+    </servlet-mapping>
+
+		
+    <servlet>
+        <servlet-name>AccueilServlet</servlet-name>
+        <servlet-class>servlets.AccueilServlet</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>AccueilServlet</servlet-name>
+        <url-pattern>/accueil</url-pattern>
+    </servlet-mapping>
+    
 </web-app>

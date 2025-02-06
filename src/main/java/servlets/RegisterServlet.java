@@ -1,47 +1,59 @@
 package servlets;
 
+import models.User;
 import utils.DBConnection;
+
 import jakarta.servlet.*;
 import jakarta.servlet.http.*;
-import java.io.*;
-import java.sql.*;
+import java.io.IOException;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 
 @SuppressWarnings("serial")
 public class RegisterServlet extends HttpServlet {
-    
+
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        // Récupérer les données du formulaire
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        
+        // Récupérer les paramètres du formulaire d'inscription
         String username = request.getParameter("username");
         String email = request.getParameter("email");
         String password = request.getParameter("password");
 
+        // Créer un objet User avec les données récupérées
+        User user = new User();
+        user.setUsername(username);
+        user.setEmail(email);
+        user.setPassword(password);
+
         try {
-            // Utiliser la classe DBConnection pour obtenir la connexion
+            // Connexion à la base de données
             Connection conn = DBConnection.getConnection();
 
-            // Requête d'insertion SQL
-            String query = "INSERT INTO utilisateurs (nom_utilisateur, email, mot_de_passe) VALUES (?, ?, ?)";
-            PreparedStatement statement = conn.prepareStatement(query);
-            statement.setString(1, username);
-            statement.setString(2, email);
-            statement.setString(3, password); // Pensez à sécuriser le mot de passe
+            // Requête d'insertion dans la base de données
+            String query = "INSERT INTO utilisateurs (nom_utilisateur, mot_de_passe, email) VALUES (?, ?, ?)";
+            PreparedStatement stmt = conn.prepareStatement(query);
+            stmt.setString(1, user.getUsername());
+            stmt.setString(2, user.getPassword());  // Insérer le mot de passe sans hashage
+            stmt.setString(3, user.getEmail());
 
-            // Exécuter la requête
-            int result = statement.executeUpdate();
+            // Exécuter la requête et vérifier si l'utilisateur a bien été ajouté
+            int result = stmt.executeUpdate();
 
-            // Vérifier si l'utilisateur a été ajouté
+            // Si l'inscription est réussie
             if (result > 0) {
-                response.getWriter().println("Inscription réussie !");
+                response.sendRedirect("connection.jsp?message=Inscription réussie !");
             } else {
-                response.getWriter().println("Erreur lors de l'inscription.");
+                request.setAttribute("errorMessage", "Erreur lors de l'inscription.");
+                request.getRequestDispatcher("register.jsp").forward(request, response);
             }
-
-            // Fermer la connexion
             conn.close();
         } catch (SQLException e) {
             e.printStackTrace();
-            response.getWriter().println("Erreur : " + e.getMessage());
+            request.setAttribute("errorMessage", "Erreur serveur : " + e.getMessage());
+            request.getRequestDispatcher("register.jsp").forward(request, response);
         }
     }
 }
