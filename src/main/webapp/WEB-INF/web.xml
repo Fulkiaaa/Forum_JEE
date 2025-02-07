@@ -15,7 +15,7 @@
 
     <servlet-mapping>
         <servlet-name>RegisterServlet</servlet-name>
-        <url-pattern>/register</url-pattern>
+        <url-pattern>/RegisterServlet</url-pattern>
     </servlet-mapping>
 
 	<!-- Définition du servlet pour la connexion -->
@@ -26,7 +26,7 @@
 
     <servlet-mapping>
         <servlet-name>ConnectionServlet</servlet-name>
-        <url-pattern>/connection</url-pattern>
+        <url-pattern>/ConnectionServlet</url-pattern>
     </servlet-mapping>
 
 	 <!-- Définition du servlet pour l'accueil -->	
@@ -37,7 +37,7 @@
 
     <servlet-mapping>
         <servlet-name>HomeServlet</servlet-name>
-        <url-pattern>/home</url-pattern>
+        <url-pattern>/HomeServlet</url-pattern>
     </servlet-mapping>
     
 </web-app>
