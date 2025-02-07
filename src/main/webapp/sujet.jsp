@@ -42,7 +42,7 @@
         </form>
         
         <div class="text-center mt-3">
-            <a href="accueil.jsp" class="btn btn-secondary">Retour à l'accueil</a>
+            <a href="home.jsp" class="btn btn-secondary">Retour à l'accueil</a>
         </div>
     </div>
 </body>

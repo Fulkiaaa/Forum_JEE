@@ -22,7 +22,7 @@
                         %>
                             <div class="alert alert-danger">Vous devez être connecté pour poster un message.</div>
                         <% } else { %>
-                            <form action="CreationMessageServlet" method="post">
+                            <form action="ajoutMessage" method="post">
                                 <input type="hidden" name="id_sujet" value="<%= request.getParameter("id") %>">
                                 <div class="mb-3">
                                     <label for="contenu_message" class="form-label">Votre message</label>
