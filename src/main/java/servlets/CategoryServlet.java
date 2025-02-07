@@ -2,19 +2,12 @@ package servlets;
 
 import java.io.IOException;
 import java.sql.Connection;
-import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
-import jakarta.servlet.*;
-import jakarta.servlet.annotation.WebServlet;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.http.HttpServlet;
-//import javax.servlet.ServletException;
-//import javax.servlet.annotation.WebServlet;
-//import javax.servlet.http.HttpServlet;
-//import javax.servlet.http.HttpServletRequest;
-//import javax.servlet.http.HttpServletResponse;
-//import javax.servlet.RequestDispatcher;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
@@ -23,14 +16,7 @@ import models.Category;
 import models.Subject;
 import models.User;
 
-import java.io.IOException;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.util.ArrayList;
-
-import jakarta.servlet.*;
-
+@SuppressWarnings("serial")
 public class CategoryServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) 
             throws ServletException, IOException {
@@ -59,7 +45,7 @@ public class CategoryServlet extends HttpServlet {
             String querySujets = "SELECT s.id_sujet, s.titre_sujet, s.contenu_sujet, s.date_creation,"
             		+ " u.id_utilisateur, u.nom_utilisateur, u.email, u.mot_de_passe"
             		+ " FROM sujets s"
-            		+ " JOIN utilisateurs u ON s.id_utilisateur = u.id_utilisateur"
+            		+ " INNER JOIN utilisateurs u ON s.id_utilisateur = u.id_utilisateur"
             		+ " WHERE s.id_categorie = ?";
 
             PreparedStatement stmtSujets = conn.prepareStatement(querySujets);

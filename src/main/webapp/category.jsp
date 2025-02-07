@@ -56,7 +56,7 @@
         </li> --%>
         
         <div class="entry">
-	        <h2><a href="#"><%= subject.getTitle() %></a></h2>
+	        <h2><a href="sujet?id=<%= subject.getId() %>"><%= subject.getTitle() %></a></h2>
 	        <p><%= subject.getContent() %></p>
 	        <p class="meta">Posté par <%= auteur.getUsername() %> le <span class="date"><%= subject.getDateFormated() %></span></p>
 	    </div>
@@ -90,7 +90,7 @@
 	            <div class="modal-body">
 	                <% if (isLoggedIn) { %>
 	                    <!-- Formulaire d'ajout de sujet -->
-	                    <form action="SujetServlet" method="POST">
+	                    <form action="sujet" method="POST">
 	                        <div class="mb-3">
 	                            <label for="title" class="form-label">Titre du sujet</label>
 	                            <input type="text" class="form-control" id="title" name="title" required>
