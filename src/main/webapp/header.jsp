@@ -21,6 +21,6 @@
             </div>
         </nav>
         <!-- Bouton Inscription -->
-        <a href="register.jsp" class="btn btn-primary fw-bold">Inscription</a>
+        <a href="register.jsp" class="btn btn-primary fw-bold">Inscription / Connexion</a>
     </div>
 </header>
