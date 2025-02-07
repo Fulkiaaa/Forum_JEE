@@ -4,7 +4,7 @@
 	
 	<!-- Liste des fichiers de bienvenue -->
     <welcome-file-list>
-        <welcome-file>index.jsp</welcome-file>  <!-- Redirige vers la page d'index -->
+        <welcome-file>home.jsp</welcome-file>  <!-- Redirige vers la page d'index -->
     </welcome-file-list>
 	
 	<!-- Définition du servlet pour l'inscription -->
