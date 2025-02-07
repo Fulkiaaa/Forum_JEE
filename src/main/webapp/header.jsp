@@ -1,10 +1,10 @@
 <header class="bg-dark shadow-sm py-4">
     <div class="container d-flex align-items-center justify-content-between">
-        <!-- Logo aligned to the left -->
+        <!-- Logo a gauche -->
         <a href="#">
             <img src="assets/images/La_Manu_logo_blanc_slogan.png" alt="Logo" style="max-height: 70px;">
         </a>
-        <!-- Navigation Links -->
+        <!-- Liens de navigation -->
         <nav class="nav">
             <a class="nav-link text-white fw-bold mx-3" href="#football">Football</a>
             <a class="nav-link text-white fw-bold mx-3" href="#basketball">Basketball</a>
@@ -20,5 +20,7 @@
                 </ul>
             </div>
         </nav>
+        <!-- Bouton Inscription -->
+        <a href="register.jsp" class="btn btn-primary fw-bold">Inscription / Connexion</a>
     </div>
 </header>
