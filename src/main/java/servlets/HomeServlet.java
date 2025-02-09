@@ -28,9 +28,9 @@ public class HomeServlet extends HttpServlet {
 
             while (rs.next()) {
                 Subject subject = new Subject(
-                        rs.getInt("id"),
+                        rs.getInt("id_sujet"),
                         rs.getString("titre_sujet"),
-                        rs.getString("contenu"),
+                        rs.getString("contenu_sujet"),
                         rs.getInt("id_categorie"),
                         rs.getInt("id_utilisateur"),
                         rs.getTimestamp("date_creation")
