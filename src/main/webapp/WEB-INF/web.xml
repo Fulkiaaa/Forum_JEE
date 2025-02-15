@@ -29,7 +29,7 @@
         <url-pattern>/connection</url-pattern> <!-- dépend du formaction de connection.JSP --> 
     </servlet-mapping>
 
-	<!-- Définition du servlet pour l'accueil -->	
+	 <!-- Définition du servlet pour l'accueil -->	
     <servlet>
         <servlet-name>HomeServlet</servlet-name>
         <servlet-class>servlets.HomeServlet</servlet-class>
@@ -40,27 +40,25 @@
         <url-pattern>/home</url-pattern> <!-- dépend du formaction de connection.JSP -->
     </servlet-mapping>
     
-    <!-- Définition du servlet pour les sujets -->	
+     <!-- Définition du servlet pour les sujets d'une categorie -->	
     <servlet>
-        <servlet-name>SujetServlet</servlet-name>
-        <servlet-class>servlets.SujetServlet</servlet-class>
+        <servlet-name>CategoryServlet</servlet-name>
+        <servlet-class>servlets.CategoryServlet</servlet-class>
     </servlet>
 
     <servlet-mapping>
-        <servlet-name>SujetServlet</servlet-name>
-        <url-pattern>/sujet</url-pattern> <!-- dépend du formaction de sujet.JSP -->
+        <servlet-name>CategoryServlet</servlet-name>
+        <url-pattern>/category</url-pattern>
     </servlet-mapping>
     
-    
-    <!-- Définition du servlet pour les ajouts messages -->	
     <servlet>
-        <servlet-name>CreationMessageServlet</servlet-name>
-        <servlet-class>servlets.CreationMessageServlet</servlet-class>
+        <servlet-name>SubjectCreationServlet</servlet-name>
+        <servlet-class>servlets.SubjectCreationServlet</servlet-class>
     </servlet>
 
     <servlet-mapping>
-        <servlet-name>CreationMessageServlet</servlet-name>
-        <url-pattern>/ajoutMessage</url-pattern> <!-- dépend du formaction de ajoutMessage.JSP -->
+        <servlet-name>SubjectCreationServlet</servlet-name>
+        <url-pattern>/subjectcreation</url-pattern>
     </servlet-mapping>
-    
+
 </web-app>
