@@ -1,7 +1,7 @@
 <header class="bg-dark shadow-sm py-4">
     <div class="container d-flex align-items-center justify-content-between">
         <!-- Logo a gauche -->
-        <a href="#">
+        <a href="/Forum_JEE/index.jsp">
             <img src="assets/images/La_Manu_logo_blanc_slogan.png" alt="Logo" style="max-height: 70px;">
         </a>
         <!-- Liens de navigation -->

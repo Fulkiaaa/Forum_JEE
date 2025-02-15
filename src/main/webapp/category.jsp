@@ -21,8 +21,6 @@
 	<%@ page import="java.util.List" %>
     <%@ page import="models.Subject, models.Category, models.User" %>
     
-
-
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SportsZone</title>
@@ -79,7 +77,7 @@
 %>
 		
 		
-		<!-- Modal -->
+	<!-- Modal -->
 	<div class="modal fade" id="createSubjectModal" tabindex="-1" aria-labelledby="createSubjectModalLabel" aria-hidden="true">
 	    <div class="modal-dialog">
 	        <div class="modal-content">

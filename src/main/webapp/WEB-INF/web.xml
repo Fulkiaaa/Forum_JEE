@@ -60,5 +60,15 @@
 	    <servlet-name>SujetServlet</servlet-name>
 	    <url-pattern>/sujet</url-pattern>
 	</servlet-mapping>
+	
+	<servlet>
+	    <servlet-name>CreationMessageServlet</servlet-name>
+	    <servlet-class>servlets.CreationMessageServlet</servlet-class>
+	</servlet>
+	
+	<servlet-mapping>
+	    <servlet-name>CreationMessageServlet</servlet-name>
+	    <url-pattern>/creationMessage</url-pattern>
+	</servlet-mapping>
 
 </web-app>

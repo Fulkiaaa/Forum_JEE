@@ -1,61 +1,51 @@
 package servlets;
 
-import utils.DBConnection;
-
+import java.io.IOException;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.Timestamp;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.HttpSession;
-import java.io.IOException;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
 
+import utils.DBConnection;
+import models.User;
+
+@SuppressWarnings("serial")
 public class CreationMessageServlet extends HttpServlet {
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) 
+            throws ServletException, IOException {
+        
+        // Vérifier si l'utilisateur est connecté
+        User utilisateur = (User) request.getSession().getAttribute("user");
+        if (utilisateur == null) {
+            response.sendRedirect("connection.jsp");
+            return;
+        }
 
-    /**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
+        String contenu = request.getParameter("contenu");
+        String idSujet = request.getParameter("idSujet");
 
-	@Override
-	protected void doPost(HttpServletRequest request, HttpServletResponse response)
-	        throws ServletException, IOException {
-	    try {
-	        String idSujetStr = request.getParameter("id_sujet");
-	        if (idSujetStr == null || idSujetStr.isEmpty()) {
-	            request.setAttribute("errorMessage", "L'ID du sujet est manquant.");
-	            request.getRequestDispatcher("creation_message.jsp").forward(request, response);
-	            return;
-	        }
+        if (contenu == null || contenu.trim().isEmpty() || idSujet == null || idSujet.isEmpty()) {
+            response.sendRedirect("sujet?id=" + idSujet + "&error=emptyMessage");
+            return;
+        }
 
-	        int idSujet = Integer.parseInt(idSujetStr);
-	        String contenuMessage = request.getParameter("contenu_message");
+        try (Connection conn = DBConnection.getConnection()) {
+            String query = "INSERT INTO messages (contenu_message, date_creation, id_sujet, id_utilisateur) VALUES (?, ?, ?, ?)";
+            PreparedStatement stmt = conn.prepareStatement(query);
+            stmt.setString(1, contenu);
+            stmt.setTimestamp(2, new Timestamp(System.currentTimeMillis()));
+            stmt.setInt(3, Integer.parseInt(idSujet));
+            stmt.setInt(4, utilisateur.getId());
 
-	        if (contenuMessage == null || contenuMessage.trim().isEmpty()) {
-	            request.setAttribute("errorMessage", "Le message ne peut pas être vide !");
-	            request.getRequestDispatcher("creation_message.jsp").forward(request, response);
-	            return;
-	        }
+            stmt.executeUpdate();
 
-	        Connection conn = DBConnection.getConnection();
-	        String query = "INSERT INTO messages (contenu_message, id_sujet, id_utilisateur, date_creation) VALUES (?, ?, ?, NOW())";
-	        PreparedStatement stmt = conn.prepareStatement(query);
-	        stmt.setString(1, contenuMessage);
-	        stmt.setInt(2, idSujet);
-	        stmt.setInt(3, 1); // Remplace 1 par l'ID de l'utilisateur connecté
-
-	        stmt.executeUpdate();
-	        conn.close();
-
-	        response.sendRedirect("sujet.jsp?id=" + idSujet);
-	    } catch (NumberFormatException e) {
-	        request.setAttribute("errorMessage", "Format d'ID sujet invalide.");
-	        request.getRequestDispatcher("creation_message.jsp").forward(request, response);
-	    } catch (Exception e) {
-	        request.setAttribute("errorMessage", "Erreur : " + e.getMessage());
-	        request.getRequestDispatcher("creation_message.jsp").forward(request, response);
-	    }
-	}
+            response.sendRedirect("sujet?id=" + idSujet);
+        } catch (Exception e) {
+            e.printStackTrace();
+            response.sendRedirect("error.jsp");
+        }
+    }
 }
