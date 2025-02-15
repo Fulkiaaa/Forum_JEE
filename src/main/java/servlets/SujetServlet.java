@@ -1,75 +1,77 @@
 package servlets;
 
-import jakarta.servlet.ServletException;
-import jakarta.servlet.http.HttpServlet;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.RequestDispatcher;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+
 import utils.DBConnection;
+import models.Subject;
+import models.User;
+import models.Category;
 
+@SuppressWarnings("serial")
 public class SujetServlet extends HttpServlet {
-    /**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
-	@Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) 
             throws ServletException, IOException {
-        
         String idSujet = request.getParameter("id");
 
         if (idSujet == null || idSujet.isEmpty()) {
-            response.sendRedirect("accueil.jsp");
+            response.sendRedirect("index.jsp");
             return;
         }
 
-        try {
-            Connection conn = DBConnection.getConnection();
-            
-            // Récupération du titre du sujet
-            String querySujet = "SELECT titre_sujet FROM sujets WHERE id_sujet = ?";
-            PreparedStatement stmtSujet = conn.prepareStatement(querySujet);
-            stmtSujet.setInt(1, Integer.parseInt(idSujet));
-            ResultSet rsSujet = stmtSujet.executeQuery();
-            
-            String titreSujet = "Sujet inconnu";
-            if (rsSujet.next()) {
-                titreSujet = rsSujet.getString("titre_sujet");
+        Subject sujet = null;
+
+        try (Connection conn = DBConnection.getConnection()) {
+            // Requête pour récupérer les informations du sujet avec son utilisateur et sa catégorie
+            String query = "SELECT s.id_sujet, s.titre_sujet, s.contenu_sujet, s.date_creation, " +
+                           "u.id_utilisateur, u.nom_utilisateur, u.email, u.mot_de_passe, " +
+                           "c.id_categorie, c.nom_categorie " +
+                           "FROM sujets s " +
+                           "INNER JOIN utilisateurs u ON s.id_utilisateur = u.id_utilisateur " +
+                           "INNER JOIN categories c ON s.id_categorie = c.id_categorie " +
+                           "WHERE s.id_sujet = ?";
+
+            PreparedStatement stmt = conn.prepareStatement(query);
+            stmt.setInt(1, Integer.parseInt(idSujet));
+            ResultSet rs = stmt.executeQuery();
+
+            if (rs.next()) {
+                User utilisateur = new User(
+                    rs.getInt("id_utilisateur"),
+                    rs.getString("nom_utilisateur"),
+                    rs.getString("email"),
+                    rs.getString("mot_de_passe")
+                );
+
+                Category categorie = new Category(
+                    rs.getInt("id_categorie"),
+                    rs.getString("nom_categorie")
+                );
+
+                sujet = new Subject(
+                    rs.getInt("id_sujet"),
+                    rs.getString("titre_sujet"),
+                    rs.getString("contenu_sujet"),
+                    rs.getDate("date_creation"),
+                    categorie,
+                    utilisateur
+                );
+
+                request.setAttribute("subject", sujet);
+                RequestDispatcher dispatcher = request.getRequestDispatcher("sujet.jsp");
+                dispatcher.forward(request, response);
+                return;
             }
-
-            // Récupération des messages du sujet
-            String queryMessages = "SELECT m.contenu_message, u.nom_utilisateur, m.date_creation FROM messages m " +
-                                   "JOIN utilisateurs u ON m.id_utilisateur = u.id_utilisateur " +
-                                   "WHERE m.id_sujet = ? ORDER BY m.date_creation ASC";
-            PreparedStatement stmtMessages = conn.prepareStatement(queryMessages);
-            stmtMessages.setInt(1, Integer.parseInt(idSujet));
-            ResultSet rsMessages = stmtMessages.executeQuery();
-
-            List<HashMap<String, String>> messages = new ArrayList<>();
-            while (rsMessages.next()) {
-                HashMap<String, String> message = new HashMap<>();
-                message.put("auteur", rsMessages.getString("nom_utilisateur"));
-                message.put("contenu", rsMessages.getString("contenu_message"));
-                message.put("date", rsMessages.getString("date_creation"));
-                messages.add(message);
-            }
-
-            // Envoi des données à la JSP
-            request.setAttribute("titreSujet", titreSujet);
-            request.setAttribute("messages", messages);
-            request.getRequestDispatcher("sujet.jsp").forward(request, response);
-
         } catch (Exception e) {
             e.printStackTrace();
-            request.setAttribute("errorMessage", "Erreur serveur : " + e.getMessage());
-            request.getRequestDispatcher("accueil.jsp").forward(request, response);
+            response.sendRedirect("error.jsp");
         }
     }
 }

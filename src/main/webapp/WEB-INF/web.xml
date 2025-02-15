@@ -52,13 +52,13 @@
     </servlet-mapping>
     
     <servlet>
-        <servlet-name>SubjectCreationServlet</servlet-name>
-        <servlet-class>servlets.SubjectCreationServlet</servlet-class>
-    </servlet>
-
-    <servlet-mapping>
-        <servlet-name>SubjectCreationServlet</servlet-name>
-        <url-pattern>/subjectcreation</url-pattern>
-    </servlet-mapping>
+	    <servlet-name>SujetServlet</servlet-name>
+	    <servlet-class>servlets.SujetServlet</servlet-class>
+	</servlet>
+	
+	<servlet-mapping>
+	    <servlet-name>SujetServlet</servlet-name>
+	    <url-pattern>/sujet</url-pattern>
+	</servlet-mapping>
 
 </web-app>
