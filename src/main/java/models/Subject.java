@@ -1,100 +1,71 @@
 package models;
 
-import java.util.Date;
+import java.sql.Date;
+import java.text.SimpleDateFormat;
 
-public class Subject {
-    private int id;
-    private String title;
-    private String content;
-    private int idCategorie;
-    private int idUser;
-    private Date creationDate;
+public class Subject{
+	private int id;
+	private String title;
+	private String content;
+	private Date date;
+	private Category category;
+	private User user;
+		
+	public Subject(int idSubject, String title, String content, Date date, Category category, User user) {			
+		this.id = idSubject;
+		this.title = title;
+		this.content = content;
+		this.date = date;
+		this.category = category;
+		this.user = user;
+	}
 
-    // Constructeur par défaut
-    public Subject() {
-    }
+	public String getTitle() {
+		return title;
+	}
 
-    // Constructeur avec paramètres
-    public Subject(int id, String title, String content, int idCategorie, int idUser, Date creationDate) {
-        this.id = id;
-        this.title = title;
-        this.content = content;
-        this.idCategorie = idCategorie;
-        this.idUser = idUser;
-        this.creationDate = creationDate;
-    }
+	public void setTitle(String title) {
+		this.title = title;
+	}
 
-    // Getters et Setters
-    public int getId() {
-        
-    	return id;
-    }
+	public String getContent() {
+		return content;
+	}
 
-    public void setId(int id) {
-        
-    	this.id = id;
-    }
+	public void setContent(String content) {
+		this.content = content;
+	}
 
-    public String getTitle() {
-        
-    	return title;
-    }
+	public Date getDate() {
+		return date;
+	}
 
-    public void setTitle(String title) {
-        
-    	this.title = title;
-    }
+	public void setDate(Date date) {
+		this.date = date;
+	}
 
-    public String getContent() {
-        
-    	return content;
-    }
+	public Category getCategory() {
+		return category;
+	}
 
-    public void setContent(String content) {
-        
-    	this.content = content;
-    }
+	public void setCategory(Category category) {
+		this.category = category;
+	}
 
-    public int getIdCategorie() {
-        
-    	return idCategorie;
-    }
+	public User getUser() {
+		return user;
+	}
 
-    public void setIdCategorie(int idCategorie) {
-        
-    	this.idCategorie = idCategorie;
-    }
+	public void setUser(User user) {
+		this.user = user;
+	}
 
-    public int getIdUser() {
-        
-    	return idUser;
-    }
-
-    public void setIdUser(int idUser) {
-        
-    	this.idUser = idUser;
-    }
-
-    public Date getCreationDate() {
-        
-    	return creationDate;
-    }
-
-    public void setCreationDate(Date creationDate) {
-    	
-        this.creationDate = creationDate;
-    }
-
-    // Méthode toString pour afficher les informations du sujet
-    @Override
-    public String toString() {
-        return "Sujet{" +
-                "id=" + id +
-                ", titre='" + title + '\'' +
-                ", contenu='" + content + '\'' +
-                ", idCategorie=" + idCategorie +
-                ", idUtilisateur=" + idUser +
-                ", dateCreation=" + creationDate +
-                '}';
-    }
-}
+	public int getId() {
+		return id;
+	}
+	
+	public String getDateFormated() {
+		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+	    return sdf.format(this.date);
+	}
+	}
