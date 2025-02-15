@@ -28,7 +28,7 @@ public class SubjectCreationServlet extends HttpServlet {
         if (idCategorie == null || idCategorie.isEmpty()
         		|| titre == null || titre.isEmpty()
         		|| contenu == null || contenu.isEmpty()) {
-            response.sendRedirect("index.jsp");
+            response.sendRedirect("home.jsp");
             return;
         }
 

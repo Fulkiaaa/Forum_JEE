@@ -23,7 +23,7 @@ public class SujetServlet extends HttpServlet {
         String idSujet = request.getParameter("id");
 
         if (idSujet == null || idSujet.isEmpty()) {
-            response.sendRedirect("index.jsp");
+            response.sendRedirect("home.jsp");
             return;
         }
 

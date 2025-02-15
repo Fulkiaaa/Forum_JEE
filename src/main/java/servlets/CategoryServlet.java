@@ -23,7 +23,7 @@ public class CategoryServlet extends HttpServlet {
         String idCategorie = request.getParameter("id");
 
         if (idCategorie == null || idCategorie.isEmpty()) {
-            response.sendRedirect("index.jsp");
+            response.sendRedirect("home.jsp");
             return;
         }
 

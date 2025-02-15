@@ -20,36 +20,21 @@ public class Subject{
 		this.user = user;
 	}
 
-	// Getters et Setters
-    public int getId() {
-        
-    	return id;
-    }
+	public String getTitle() {
+		return title;
+	}
 
-    public void setId(int id) {
-        
-    	this.id = id;
-    }
+	public void setTitle(String title) {
+		this.title = title;
+	}
 
-    public String getTitle() {
-        
-    	return title;
-    }
+	public String getContent() {
+		return content;
+	}
 
-    public void setTitle(String title) {
-        
-    	this.title = title;
-    }
-
-    public String getContent() {
-        
-    	return content;
-    }
-
-    public void setContent(String content) {
-        
-    	this.content = content;
-    }
+	public void setContent(String content) {
+		this.content = content;
+	}
 
 	public Date getDate() {
 		return date;
@@ -83,17 +68,4 @@ public class Subject{
 		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 	    return sdf.format(this.date);
 	}
-
-	// Méthode toString pour afficher les informations du sujet
-    @Override
-    public String toString() {
-        return "Sujet{" +
-                "id=" + id +
-                ", titre='" + title + '\'' +
-                ", contenu='" + content + '\'' +
-                ", idCategorie=" + idCategorie +
-                ", idUtilisateur=" + idUser +
-                ", dateCreation=" + creationDate +
-                '}';
-    }
-}
+	}

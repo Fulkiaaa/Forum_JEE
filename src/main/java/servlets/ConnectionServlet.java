@@ -35,7 +35,7 @@ public class ConnectionServlet extends HttpServlet {
                 User user = new User(rs.getInt("id_utilisateur"), rs.getString("nom_utilisateur"), email, password);
                 HttpSession session = request.getSession();
                 session.setAttribute("user", user);
-                response.sendRedirect("index.jsp");
+                response.sendRedirect("home.jsp");
             } else {
                 request.setAttribute("errorMessage", "Identifiants incorrects.");
                 request.getRequestDispatcher("connection.jsp").forward(request, response);

@@ -112,7 +112,7 @@
 		
 				
 
-    <a href="index.jsp">Retour à l'accueil</a>
+    <a href="home.jsp">Retour à l'accueil</a>
     </main>
     <%@ include file="footer.jsp" %>
 </body>
