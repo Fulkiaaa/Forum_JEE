@@ -39,20 +39,12 @@
         	<h1 class="display-4">Catégorie : <%= categorie.getName() %></h1>
     	<%
         }
-    	%>
-
-  
-        <%
+        
         List<Subject> subjects = (List<Subject>) request.getAttribute("subjects");
         if (subjects != null && !subjects.isEmpty()) {
         	for (Subject subject : subjects) {
             	User auteur = subject.getUser();            	
-        %>
-        <%-- <li>
-            <a href="SujetServlet?id=<%= subject.getId() %>"><%= subject.getTitle() %></a>
-            <small>par <%= auteur.getUsername() %></small>
-        </li> --%>
-        
+        %>        
         <div class="entry">
 	        <h2><a href="sujet?id=<%= subject.getId() %>"><%= subject.getTitle() %></a></h2>
 	        <p><%= subject.getContent() %></p>
@@ -71,10 +63,9 @@
 		    <i class="fas fa-plus"></i>
 		</a>    
 		<%
-    /* User currentUser = (User) session.getAttribute("user");
-    boolean isLoggedIn = (currentUser != null); */
-    boolean isLoggedIn = true;
-%>
+    	User currentUser = (User) session.getAttribute("user");
+    	boolean isLoggedIn = (currentUser != null);
+		%>
 		
 		
 	<!-- Modal -->
@@ -89,6 +80,9 @@
 	                <% if (isLoggedIn) { %>
 	                    <!-- Formulaire d'ajout de sujet -->
 	                    <form action="sujet" method="POST">
+	                    	<input type="hidden" name="idCat" value="<%= request.getParameter("id") %>">	                    
+	                    	
+	                    	
 	                        <div class="mb-3">
 	                            <label for="title" class="form-label">Titre du sujet</label>
 	                            <input type="text" class="form-control" id="title" name="title" required>
@@ -108,11 +102,10 @@
 	            </div>
 	        </div>
 	    </div>
-	</div>
-		
-				
+	</div>				
 
     <a href="home.jsp">Retour à l'accueil</a>
+    
     </main>
     <%@ include file="footer.jsp" %>
 </body>

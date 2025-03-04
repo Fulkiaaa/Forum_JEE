@@ -66,36 +66,6 @@
 		<a href="#" class="floating-button" data-bs-toggle="modal" data-bs-target="#createMessageModal">
 		    <i class="fas fa-plus"></i>
 		</a>  
-        
-	<!-- Modal -->
-	<div class="modal fade" id="createMessageModal" tabindex="-1" aria-labelledby="createMessageModalLabel" aria-hidden="true">
-	    <div class="modal-dialog">
-	        <div class="modal-content">
-	            <div class="modal-header">
-	                <h5 class="modal-title text-center w-100" id="createMessageModalLabel">Créer un nouveau sujet</h5>
-	                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fermer"></button>
-	            </div>
-	            <div class="modal-body">
-		        <% if (isLoggedIn) { %>
-				    <h3>Ajouter un message</h3>
-				    <form action="creationMessage" method="POST">
-				        <input type="hidden" name="idSujet" value="${param.id}">
-				        <div class="mb-3">
-				            <label for="contenu" class="form-label">Votre message</label>
-				            <textarea class="form-control" id="contenu" name="contenu" rows="3" required></textarea>
-				        </div>
-				        <button type="submit" class="btn btn-primary">Envoyer</button>
-				    </form>
-				<% } else { %>
-				    <div class="alert alert-warning" role="alert">
-				        Vous devez être connecté pour poster un message. <a href="connection.jsp" class="alert-link">Connectez-vous ici.</a>
-				    </div>
-				<% } %>
-	            </div>
-	        </div>
-	    </div>
-	</div>
-
     <%
     } else {
     %>

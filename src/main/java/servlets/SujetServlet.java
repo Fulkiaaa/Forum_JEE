@@ -4,12 +4,18 @@ import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Date;
+import java.util.Enumeration;
+
 import jakarta.servlet.ServletException;
 import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import utils.DBConnection;
 import models.Category;
 import models.Subject;
@@ -21,6 +27,10 @@ public class SujetServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) 
             throws ServletException, IOException {
         String idSujet = request.getParameter("id");
+        System.out.print("test : " + idSujet);
+        if(idSujet == null) {
+        	idSujet = (String)request.getAttribute("id");
+        }
 
         if (idSujet == null || idSujet.isEmpty()) {
             response.sendRedirect("home.jsp");
@@ -100,6 +110,61 @@ public class SujetServlet extends HttpServlet {
             request.setAttribute("messages", messages);
             RequestDispatcher dispatcher = request.getRequestDispatcher("sujet.jsp");
             dispatcher.forward(request, response);
+        } catch (Exception e) {
+            e.printStackTrace();
+            response.sendRedirect("error.jsp");
+        }
+    }
+    
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) 
+            throws ServletException, IOException {
+        HttpSession session = request.getSession();
+        
+        String idCategorie = request.getParameter("idCat");
+        String titre = request.getParameter("title");
+        String contenu = request.getParameter("content");
+        String idUser = Integer.toString(((User) session.getAttribute("user")).getId());
+                                  
+        if (idCategorie == null || idCategorie.isEmpty()
+                || titre == null || titre.isEmpty()
+                || contenu == null || contenu.isEmpty()) {
+            response.sendRedirect("home.jsp");
+            return;
+        }
+
+        String sujet = null;
+        try (Connection conn = DBConnection.getConnection()) {
+            String queryInsertSubject = "INSERT INTO sujets (titre_sujet, contenu_sujet, id_categorie, id_utilisateur) VALUES (?, ?, ?, ?);";
+            try (PreparedStatement stmtInsertSubject = conn.prepareStatement(queryInsertSubject)) {
+                stmtInsertSubject.setString(1, titre);
+                stmtInsertSubject.setString(2, contenu);
+                stmtInsertSubject.setInt(3, Integer.parseInt(idCategorie));
+                stmtInsertSubject.setInt(4, Integer.parseInt(idUser));
+                
+                int rowsAffected = stmtInsertSubject.executeUpdate();
+
+                if (rowsAffected > 0) {
+                    String querySujet = "SELECT id_sujet FROM sujets WHERE titre_sujet = ? AND contenu_sujet = ? AND id_categorie = ? AND id_utilisateur = ?";
+                    try (PreparedStatement stmtSujet = conn.prepareStatement(querySujet)) {
+                        stmtSujet.setString(1, titre);
+                        stmtSujet.setString(2, contenu);
+                        stmtSujet.setInt(3, Integer.parseInt(idCategorie));
+                        stmtSujet.setInt(4, Integer.parseInt(idUser));
+                        
+                        try (ResultSet rsSujets = stmtSujet.executeQuery()) {
+                        	
+                            if (rsSujets.next()) {                            	
+                            	sujet = rsSujets.getString("id_sujet");
+                            }
+                        }
+                    }
+                }
+            }
+            request.setAttribute("id", sujet);
+            doGet(request, response);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            response.sendRedirect("error.jsp");
         } catch (Exception e) {
             e.printStackTrace();
             response.sendRedirect("error.jsp");
