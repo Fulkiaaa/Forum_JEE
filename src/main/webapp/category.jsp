@@ -63,7 +63,6 @@
 		    <i class="fas fa-plus"></i>
 		</a>    
 		<%
-    	User currentUser = (User) session.getAttribute("user");
     	boolean isLoggedIn = (currentUser != null);
 		%>
 		

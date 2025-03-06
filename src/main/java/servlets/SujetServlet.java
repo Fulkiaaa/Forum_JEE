@@ -119,11 +119,18 @@ public class SujetServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) 
             throws ServletException, IOException {
         HttpSession session = request.getSession();
-        
+
         String idCategorie = request.getParameter("idCat");
         String titre = request.getParameter("title");
         String contenu = request.getParameter("content");
-        String idUser = Integer.toString(((User) session.getAttribute("user")).getId());
+
+        User user = (User) request.getSession().getAttribute("user");
+        if (user == null) {
+            response.sendRedirect("connection.jsp");
+            return;
+        }
+        
+        String idUser = Integer.toString(user.getId());
                                   
         if (idCategorie == null || idCategorie.isEmpty()
                 || titre == null || titre.isEmpty()

@@ -1,5 +1,6 @@
 package servlets;
 
+import models.Role;
 import models.User;
 
 import utils.DBConnection;
@@ -24,7 +25,7 @@ public class ConnectionServlet extends HttpServlet {
 
         try {
             Connection conn = DBConnection.getConnection();
-            String query = "SELECT * FROM utilisateurs WHERE email = ? AND mot_de_passe = ?";
+            String query = "SELECT id_utilisateur, nom_utilisateur, role.id, role.nom_role FROM utilisateurs INNER JOIN role ON role.id = utilisateurs.id_role WHERE email = ? AND mot_de_passe = ?";
             PreparedStatement stmt = conn.prepareStatement(query);
             stmt.setString(1, email);
             stmt.setString(2, password);
@@ -32,7 +33,7 @@ public class ConnectionServlet extends HttpServlet {
             ResultSet rs = stmt.executeQuery();
 
             if (rs.next()) {
-                User user = new User(rs.getInt("id_utilisateur"), rs.getString("nom_utilisateur"), email, password);
+                User user = new User(rs.getInt("id_utilisateur"), rs.getString("nom_utilisateur"), email, password, new Role(rs.getInt("role.id"), rs.getString("role.nom_role")));
                 HttpSession session = request.getSession();
                 session.setAttribute("user", user);
                 response.sendRedirect("home.jsp");

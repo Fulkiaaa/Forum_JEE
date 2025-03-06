@@ -71,4 +71,25 @@
 	    <url-pattern>/creationMessage</url-pattern>
 	</servlet-mapping>
 
+	<servlet>
+	    <servlet-name>HeaderServlet</servlet-name>
+	    <servlet-class>servlets.HeaderServlet</servlet-class>
+	</servlet>
+	
+	<servlet-mapping>
+	    <servlet-name>HeaderServlet</servlet-name>
+	    <url-pattern>/header</url-pattern>
+	</servlet-mapping>
+	
+	<filter>
+        <filter-name>HeaderFilter</filter-name>
+        <filter-class>filters.HeaderFilter</filter-class> <!-- Chemin complet vers la classe Filter -->
+    </filter>
+
+    <!-- Définition du mapping du filtre, il s'applique à toutes les requêtes -->
+    <filter-mapping>
+   		<filter-name>HeaderFilter</filter-name>
+    	<url-pattern>/*</url-pattern> <!-- Toutes les requêtes HTTP -->
+	</filter-mapping>
+
 </web-app>
