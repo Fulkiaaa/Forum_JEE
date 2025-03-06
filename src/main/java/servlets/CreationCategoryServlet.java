@@ -23,9 +23,25 @@ import models.User;
 import utils.DBConnection;
 
 @SuppressWarnings("serial")
-public class HeaderServlet extends HttpServlet {
+public class CreationCategoryServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) 
-            throws ServletException, IOException {            
+            throws ServletException, IOException {     
+
+		HttpSession session = request.getSession();
+        
+		User user = (User) request.getSession().getAttribute("user");
+        if (user == null) {
+            response.sendRedirect("connection.jsp");
+            return;
+        }
+        
+        if(!user.getRole().getName().equals("administrateur")) {
+        	response.sendRedirect("connection.jsp");
+            return;
+        }
+	        
+	    String idUser = Integer.toString(user.getId());
+	        
         String nameCategory = request.getParameter("title");
         
         if (nameCategory == null || nameCategory.isEmpty()) {
@@ -33,7 +49,7 @@ public class HeaderServlet extends HttpServlet {
             return;
         }
 
-        String category = null;
+        String categoryId = null;
         try (Connection conn = DBConnection.getConnection()) {
             String queryInsertSubject = "INSERT INTO categories (nom_categorie) VALUES (?);";
             try (PreparedStatement stmtInsertSubject = conn.prepareStatement(queryInsertSubject)) {
@@ -49,7 +65,7 @@ public class HeaderServlet extends HttpServlet {
                         try (ResultSet rsSujets = stmtSujet.executeQuery()) {
                         	
                             if (rsSujets.next()) {                            	
-                            	category = rsSujets.getString("id_categorie");
+                            	categoryId = rsSujets.getString("id_categorie");
                             }
                         }
                     }
@@ -57,8 +73,7 @@ public class HeaderServlet extends HttpServlet {
             }
             
             // Redirection vers la page précédente
-            String referer = request.getHeader("referer");
-            response.sendRedirect(referer);
+            response.sendRedirect("category?id=" + categoryId);
             
         } catch (SQLException e) {
             e.printStackTrace();

@@ -78,7 +78,7 @@
 	            <div class="modal-body">
 	                <% if (isLoggedIn) { %>
 	                    <!-- Formulaire d'ajout de sujet -->
-	                    <form action="sujet" method="POST">
+	                    <form action="creationSubject" method="POST">
 	                    	<input type="hidden" name="idCat" value="<%= request.getParameter("id") %>">	                    
 	                    	
 	                    	

@@ -27,7 +27,6 @@ public class SujetServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) 
             throws ServletException, IOException {
         String idSujet = request.getParameter("id");
-        System.out.print("test : " + idSujet);
         if(idSujet == null) {
         	idSujet = (String)request.getAttribute("id");
         }
@@ -110,68 +109,6 @@ public class SujetServlet extends HttpServlet {
             request.setAttribute("messages", messages);
             RequestDispatcher dispatcher = request.getRequestDispatcher("sujet.jsp");
             dispatcher.forward(request, response);
-        } catch (Exception e) {
-            e.printStackTrace();
-            response.sendRedirect("error.jsp");
-        }
-    }
-    
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) 
-            throws ServletException, IOException {
-        HttpSession session = request.getSession();
-
-        String idCategorie = request.getParameter("idCat");
-        String titre = request.getParameter("title");
-        String contenu = request.getParameter("content");
-
-        User user = (User) request.getSession().getAttribute("user");
-        if (user == null) {
-            response.sendRedirect("connection.jsp");
-            return;
-        }
-        
-        String idUser = Integer.toString(user.getId());
-                                  
-        if (idCategorie == null || idCategorie.isEmpty()
-                || titre == null || titre.isEmpty()
-                || contenu == null || contenu.isEmpty()) {
-            response.sendRedirect("home.jsp");
-            return;
-        }
-
-        String sujet = null;
-        try (Connection conn = DBConnection.getConnection()) {
-            String queryInsertSubject = "INSERT INTO sujets (titre_sujet, contenu_sujet, id_categorie, id_utilisateur) VALUES (?, ?, ?, ?);";
-            try (PreparedStatement stmtInsertSubject = conn.prepareStatement(queryInsertSubject)) {
-                stmtInsertSubject.setString(1, titre);
-                stmtInsertSubject.setString(2, contenu);
-                stmtInsertSubject.setInt(3, Integer.parseInt(idCategorie));
-                stmtInsertSubject.setInt(4, Integer.parseInt(idUser));
-                
-                int rowsAffected = stmtInsertSubject.executeUpdate();
-
-                if (rowsAffected > 0) {
-                    String querySujet = "SELECT id_sujet FROM sujets WHERE titre_sujet = ? AND contenu_sujet = ? AND id_categorie = ? AND id_utilisateur = ?";
-                    try (PreparedStatement stmtSujet = conn.prepareStatement(querySujet)) {
-                        stmtSujet.setString(1, titre);
-                        stmtSujet.setString(2, contenu);
-                        stmtSujet.setInt(3, Integer.parseInt(idCategorie));
-                        stmtSujet.setInt(4, Integer.parseInt(idUser));
-                        
-                        try (ResultSet rsSujets = stmtSujet.executeQuery()) {
-                        	
-                            if (rsSujets.next()) {                            	
-                            	sujet = rsSujets.getString("id_sujet");
-                            }
-                        }
-                    }
-                }
-            }
-            request.setAttribute("id", sujet);
-            doGet(request, response);
-        } catch (SQLException e) {
-            e.printStackTrace();
-            response.sendRedirect("error.jsp");
         } catch (Exception e) {
             e.printStackTrace();
             response.sendRedirect("error.jsp");

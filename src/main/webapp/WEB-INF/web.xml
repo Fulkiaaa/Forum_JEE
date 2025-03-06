@@ -72,13 +72,33 @@
 	</servlet-mapping>
 
 	<servlet>
-	    <servlet-name>HeaderServlet</servlet-name>
-	    <servlet-class>servlets.HeaderServlet</servlet-class>
+	    <servlet-name>CreationCategoryServlet</servlet-name>
+	    <servlet-class>servlets.CreationCategoryServlet</servlet-class>
 	</servlet>
 	
 	<servlet-mapping>
-	    <servlet-name>HeaderServlet</servlet-name>
-	    <url-pattern>/header</url-pattern>
+	    <servlet-name>CreationCategoryServlet</servlet-name>
+	    <url-pattern>/creationCategory</url-pattern>
+	</servlet-mapping>
+	
+	<servlet>
+	    <servlet-name>CreationSubjectServlet</servlet-name>
+	    <servlet-class>servlets.CreationSubjectServlet</servlet-class>
+	</servlet>
+	
+	<servlet-mapping>
+	    <servlet-name>CreationSubjectServlet</servlet-name>
+	    <url-pattern>/creationSubject</url-pattern>
+	</servlet-mapping>
+	
+	<servlet>
+	    <servlet-name>DeconnectionServlet</servlet-name>
+	    <servlet-class>servlets.DeconnectionServlet</servlet-class>
+	</servlet>
+	
+	<servlet-mapping>
+	    <servlet-name>DeconnectionServlet</servlet-name>
+	    <url-pattern>/deconnection</url-pattern>
 	</servlet-mapping>
 	
 	<filter>

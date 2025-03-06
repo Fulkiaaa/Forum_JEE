@@ -48,7 +48,7 @@ categories = (ArrayList<Category>) request.getAttribute("categories");
 					    
 					    <%
 	                    if(isAdmin == true){%>
-	                    	<li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#createCategoryModal">Ajouter une catégorie</a></li> 
+	                    	<li><a class="dropdown-item" href="home.jsp" data-bs-toggle="modal" data-bs-target="#createCategoryModal">Ajouter une catégorie</a></li> 
 	                    <% } %>   
 	                    
 					    </ul>
@@ -59,7 +59,13 @@ categories = (ArrayList<Category>) request.getAttribute("categories");
 		%>		
         </nav>
         <!-- Bouton Inscription -->
-        <a href="register.jsp" class="btn btn-primary fw-bold">Inscription / Connexion</a>
+        <% if(currentUser == null){%>
+        	<a href="register.jsp" class="btn btn-primary fw-bold">Inscription / Connexion</a>
+        <% } 
+        else{%>
+        	<a href="deconnection" class="btn btn-primary fw-bold">Déconnexion</a>
+        <%}%>
+        
     </div>
     
     <!-- Modal -->
@@ -73,7 +79,7 @@ categories = (ArrayList<Category>) request.getAttribute("categories");
 	            <div class="modal-body">
 	                <% if (isAdmin) { %>
 	                    <!-- Formulaire d'ajout de sujet -->
-	                    <form action="header" method="POST">
+	                    <form action="creationCategory" method="POST">
 
 	                        <div class="mb-3">
 	                            <label for="title" class="form-label">Titre de la catégorie</label>
