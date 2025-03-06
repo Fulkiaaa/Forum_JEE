@@ -28,7 +28,7 @@
     <%
     Subject sujet = (Subject) request.getAttribute("sujet");
     List<Message> messages = (List<Message>) request.getAttribute("messages");
-    User currentUser = (User) session.getAttribute("user");
+   
     boolean isLoggedIn = (currentUser != null);
     
     if (sujet != null) {

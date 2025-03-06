@@ -25,17 +25,7 @@ import utils.DBConnection;
 @SuppressWarnings("serial")
 public class HeaderServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) 
-            throws ServletException, IOException {
-    	System.out.println("🚀 doPost appelé !"); // DEBUG
-
-        HttpSession session = request.getSession();
-        
-        User user = (User) request.getSession().getAttribute("user");
-        if (user == null || user.getRole().getName() != "administrateur") {
-            response.sendRedirect("connection.jsp");
-            return;
-        }
-            
+            throws ServletException, IOException {            
         String nameCategory = request.getParameter("title");
         
         if (nameCategory == null || nameCategory.isEmpty()) {

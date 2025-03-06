@@ -1,6 +1,6 @@
 <%@ page import="models.User, models.Role" %>
 <%@ page import="java.util.ArrayList" %>
-<%@ page import="models.Subject, models.Category, models.User" %>
+<%@ page import="models.Subject, models.Category, models.User, models.Role" %>
 
 <% User currentUser = (User) session.getAttribute("user");
 boolean isAdmin = false;
