@@ -15,6 +15,9 @@
             <div class="col-md-4">
                 <div class="card shadow-lg">
                     <div class="card-header text-center">
+                    <a href="home.jsp" class="position-absolute start-0 ms-3 text-dark">
+    					<i class="fas fa-arrow-left fa-2x"></i>
+					</a>
                         <h3>Inscription</h3>
                     </div>
                     <div class="card-body">
