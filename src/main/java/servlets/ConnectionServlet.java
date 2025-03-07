@@ -55,7 +55,7 @@ public class ConnectionServlet extends HttpServlet {
                 User user = new User(rs.getInt("id_utilisateur"), rs.getString("nom_utilisateur"), email, pwd, new Role(rs.getInt("role.id"), rs.getString("role.nom_role")));
                 HttpSession session = request.getSession();
                 session.setAttribute("user", user);
-                response.sendRedirect("home.jsp");
+                response.sendRedirect("/Forum_JEE/");
             } else {
                 request.setAttribute("errorMessage", "Identifiants incorrects.");
                 request.getRequestDispatcher("connection.jsp").forward(request, response);
