@@ -4,12 +4,18 @@ import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Date;
+import java.util.Enumeration;
+
 import jakarta.servlet.ServletException;
 import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import utils.DBConnection;
 import models.Category;
 import models.Subject;
@@ -21,6 +27,9 @@ public class SujetServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) 
             throws ServletException, IOException {
         String idSujet = request.getParameter("id");
+        if(idSujet == null) {
+        	idSujet = (String)request.getAttribute("id");
+        }
 
         if (idSujet == null || idSujet.isEmpty()) {
             response.sendRedirect("home.jsp");

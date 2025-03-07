@@ -71,4 +71,45 @@
 	    <url-pattern>/creationMessage</url-pattern>
 	</servlet-mapping>
 
+	<servlet>
+	    <servlet-name>CreationCategoryServlet</servlet-name>
+	    <servlet-class>servlets.CreationCategoryServlet</servlet-class>
+	</servlet>
+	
+	<servlet-mapping>
+	    <servlet-name>CreationCategoryServlet</servlet-name>
+	    <url-pattern>/creationCategory</url-pattern>
+	</servlet-mapping>
+	
+	<servlet>
+	    <servlet-name>CreationSubjectServlet</servlet-name>
+	    <servlet-class>servlets.CreationSubjectServlet</servlet-class>
+	</servlet>
+	
+	<servlet-mapping>
+	    <servlet-name>CreationSubjectServlet</servlet-name>
+	    <url-pattern>/creationSubject</url-pattern>
+	</servlet-mapping>
+	
+	<servlet>
+	    <servlet-name>DeconnectionServlet</servlet-name>
+	    <servlet-class>servlets.DeconnectionServlet</servlet-class>
+	</servlet>
+	
+	<servlet-mapping>
+	    <servlet-name>DeconnectionServlet</servlet-name>
+	    <url-pattern>/deconnection</url-pattern>
+	</servlet-mapping>
+	
+	<filter>
+        <filter-name>HeaderFilter</filter-name>
+        <filter-class>filters.HeaderFilter</filter-class> <!-- Chemin complet vers la classe Filter -->
+    </filter>
+
+    <!-- Définition du mapping du filtre, il s'applique à toutes les requêtes -->
+    <filter-mapping>
+   		<filter-name>HeaderFilter</filter-name>
+    	<url-pattern>/*</url-pattern> <!-- Toutes les requêtes HTTP -->
+	</filter-mapping>
+
 </web-app>
