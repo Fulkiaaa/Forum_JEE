@@ -18,7 +18,7 @@ categories = (ArrayList<Category>) request.getAttribute("categories");
 <header class="bg-dark shadow-sm py-4">
     <div class="container d-flex align-items-center justify-content-between">
         <!-- Logo a gauche -->
-        <a href="/Forum_JEE/home.jsp">
+        <a href="/Forum_JEE/">
             <img src="assets/images/La_Manu_logo_blanc_slogan.png" alt="Logo" style="max-height: 70px;">
         </a>
         <!-- Liens de navigation -->

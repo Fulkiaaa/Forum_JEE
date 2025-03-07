@@ -16,7 +16,7 @@ import models.Subject;
 import models.User;
 
 @SuppressWarnings("serial")
-public class AccueilServlet extends HttpServlet {
+public class HomeServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) 
             throws ServletException, IOException {
         
