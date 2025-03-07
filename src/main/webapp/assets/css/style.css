@@ -1,3 +1,37 @@
+.carousel-control-prev, .carousel-control-next {
+    background-color: black;
+    height: 5vh !important;
+    width: 5vh !important;
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    top: 50% !important;
+    transform: translateY(-50%) !important;
+    bottom: auto !important;
+    border-radius: 50%;
+}
+
+.carousel-control-prev {
+    left: -50px !important;
+}
+
+.carousel-control-next {
+    right: -50px !important;
+}
+
+#subjectCarousel {
+    margin-left: 60px;
+    margin-right: 60px;
+}
+
+.entry {
+    border: 2px solid #000; /* Bordure noire de 2px */
+    border-radius: 10px; /* Coins arrondis */
+    padding: 15px; /* Espace intérieur */
+    margin: 10px; /* Espace extérieur */
+    background-color: #f9f9f9; /* Fond légèrement gris */
+}
+
 /* Footer Styles */
 footer {
     background-color: #212529; /* Dark background */

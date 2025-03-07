@@ -21,28 +21,36 @@
 
         <div class="row mt-5">
             <div class="col-md-12">
-                <h2 class="text-center mb-4">Derniers sujets.</h2>
-                <div class="list-group">
-                    <% 
-                    	@SuppressWarnings("unchecked")
-                        List<Subject> subjects = (List<Subject>) request.getAttribute("subjects");
-                        if (subjects != null && !subjects.isEmpty()) {
-                            for (Subject subject : subjects) {
-                    %>
-                    <a href="sujetServlet?id=<%= subject.getId() %>" class="list-group-item list-group-item-action">
-                        <h5><%= subject.getTitle() %></h5>
-                        <p><%= subject.getContent() %></p>
-                        <p class="text-muted">Category: <%= subject.getCategory().getName() %> | Posted by: <%= subject.getUser().getUsername() %> | On: <%= new java.text.SimpleDateFormat("dd/MM/yyyy").format(subject.getDate()) %></p>
-                    </a>
-                    <% 
-                            }
-                        } else {
-                    %>
+                <h2 class="text-center mb-4">Derniers sujets</h2>
+                
+                <% List<Subject> subjects = (List<Subject>) request.getAttribute("subjects");
+                if (subjects != null && !subjects.isEmpty()) { %>
+                    <div id="subjectCarousel" class="carousel slide" data-bs-ride="carousel">
+                        <div class="carousel-inner">
+                            <% for (int i = 0; i < subjects.size(); i++) { 
+                                Subject subject = subjects.get(i);
+                                User auteur = subject.getUser(); %>
+                                <div class="carousel-item <%= i == 0 ? "active" : "" %>">
+                                    <div class="entry">
+                                        <h2><a href="sujet?id=<%= subject.getId() %>"><%= subject.getTitle() %></a></h2>
+                                        <p><%= subject.getContent() %></p>
+                                        <p class="meta">Posté par <%= auteur.getUsername() %> le <span class="date"><%= subject.getDateFormated() %></span></p>
+                                    </div>
+                                </div>
+                            <% } %>
+                        </div>
+                        <button class="carousel-control-prev" type="button" data-bs-target="#subjectCarousel" data-bs-slide="prev">
+                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                            <span class="visually-hidden">Previous</span>
+                        </button>
+                        <button class="carousel-control-next" type="button" data-bs-target="#subjectCarousel" data-bs-slide="next">
+                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                            <span class="visually-hidden">Next</span>
+                        </button>
+                    </div>
+                <% } else { %>
                     <p>Aucun sujet trouvé.</p>
-                    <% 
-                        }
-                    %>
-                </div>
+                <% } %>
             </div>
         </div>
     </main>
