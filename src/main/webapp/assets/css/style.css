@@ -4,6 +4,11 @@ footer {
     font-family: 'Poppins', sans-serif;
 }
 
+
+body {
+    background-color: #212529 !important; /* Dark background */
+}
+
 footer img {
     display: block;
     margin: 0 auto;
