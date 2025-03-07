@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.RequestDispatcher;
@@ -20,6 +21,12 @@ import models.User;
 public class CategoryServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) 
             throws ServletException, IOException {
+    	Connection conn = null;
+    	PreparedStatement stmtCategorie = null;
+    	PreparedStatement stmtSujets = null;
+    	ResultSet rsCategorie = null;
+    	ResultSet rsSujets = null;
+    	
         String idCategorie = request.getParameter("id");
 
         if (idCategorie == null || idCategorie.isEmpty()) {
@@ -30,12 +37,13 @@ public class CategoryServlet extends HttpServlet {
         ArrayList<Subject> sujets = new ArrayList<>();
         Category categorie = null;
 
-        try (Connection conn = DBConnection.getConnection()) {
+        try {
+        	conn = DBConnection.getConnection();
             // Récupérer la catégorie
             String queryCategorie = "SELECT id_categorie, nom_categorie FROM categories WHERE id_categorie = ?";
-            PreparedStatement stmtCategorie = conn.prepareStatement(queryCategorie);
+            stmtCategorie = conn.prepareStatement(queryCategorie);
             stmtCategorie.setInt(1, Integer.parseInt(idCategorie));
-            ResultSet rsCategorie = stmtCategorie.executeQuery();
+            rsCategorie = stmtCategorie.executeQuery();
             
             if (rsCategorie.next()) {
                 categorie = new Category(rsCategorie.getInt("id_categorie"), rsCategorie.getString("nom_categorie"));
@@ -48,9 +56,9 @@ public class CategoryServlet extends HttpServlet {
             		+ " INNER JOIN utilisateurs u ON s.id_utilisateur = u.id_utilisateur"
             		+ " WHERE s.id_categorie = ?";
 
-            PreparedStatement stmtSujets = conn.prepareStatement(querySujets);
+            stmtSujets = conn.prepareStatement(querySujets);
             stmtSujets.setInt(1, Integer.parseInt(idCategorie));
-            ResultSet rsSujets = stmtSujets.executeQuery();
+            rsSujets = stmtSujets.executeQuery();
 
             while (rsSujets.next()) {
                 User utilisateur = new User(
@@ -78,6 +86,13 @@ public class CategoryServlet extends HttpServlet {
         } catch (Exception e) {
             e.printStackTrace();
             response.sendRedirect("error.jsp");
+        }finally {
+            // Fermeture des ressources dans l'ordre inverse de leur ouverture
+            try { if (rsCategorie != null) rsCategorie.close(); } catch (SQLException ignored) {}
+            try { if (rsSujets != null) rsSujets.close(); } catch (SQLException ignored) {}
+            try { if (stmtSujets != null) stmtSujets.close(); } catch (SQLException ignored) {}
+            try { if (stmtCategorie != null) stmtCategorie.close(); } catch (SQLException ignored) {}
+            try { if (conn != null) conn.close(); } catch (SQLException ignored) {}
         }
     }
 }

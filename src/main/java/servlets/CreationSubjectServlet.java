@@ -26,6 +26,11 @@ import utils.DBConnection;
 public class CreationSubjectServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) 
             throws ServletException, IOException {
+		Connection conn = null;
+    	PreparedStatement stmtInsertSubject = null;
+    	PreparedStatement stmtSujet = null;
+    	ResultSet rsSujets = null;
+    	
         HttpSession session = request.getSession();
 
         String idCategorie = request.getParameter("idCat");
@@ -48,33 +53,33 @@ public class CreationSubjectServlet extends HttpServlet {
         }
 
         String sujetId = null;
-        try (Connection conn = DBConnection.getConnection()) {
+        try {
+        	conn = DBConnection.getConnection();
             String queryInsertSubject = "INSERT INTO sujets (titre_sujet, contenu_sujet, id_categorie, id_utilisateur) VALUES (?, ?, ?, ?);";
-            try (PreparedStatement stmtInsertSubject = conn.prepareStatement(queryInsertSubject)) {
-                stmtInsertSubject.setString(1, titre);
-                stmtInsertSubject.setString(2, contenu);
-                stmtInsertSubject.setInt(3, Integer.parseInt(idCategorie));
-                stmtInsertSubject.setInt(4, Integer.parseInt(idUser));
+      
+        	stmtInsertSubject = conn.prepareStatement(queryInsertSubject);
+            stmtInsertSubject.setString(1, titre);
+            stmtInsertSubject.setString(2, contenu);
+            stmtInsertSubject.setInt(3, Integer.parseInt(idCategorie));
+            stmtInsertSubject.setInt(4, Integer.parseInt(idUser));
                 
-                int rowsAffected = stmtInsertSubject.executeUpdate();
+            int rowsAffected = stmtInsertSubject.executeUpdate();
 
-                if (rowsAffected > 0) {
-                    String querySujet = "SELECT id_sujet FROM sujets WHERE titre_sujet = ? AND contenu_sujet = ? AND id_categorie = ? AND id_utilisateur = ?";
-                    try (PreparedStatement stmtSujet = conn.prepareStatement(querySujet)) {
-                        stmtSujet.setString(1, titre);
-                        stmtSujet.setString(2, contenu);
-                        stmtSujet.setInt(3, Integer.parseInt(idCategorie));
-                        stmtSujet.setInt(4, Integer.parseInt(idUser));
-                        
-                        try (ResultSet rsSujets = stmtSujet.executeQuery()) {
-                        	
-                            if (rsSujets.next()) {                            	
-                            	sujetId = rsSujets.getString("id_sujet");
-                            }
+            if (rowsAffected > 0) {
+                String querySujet = "SELECT id_sujet FROM sujets WHERE titre_sujet = ? AND contenu_sujet = ? AND id_categorie = ? AND id_utilisateur = ?";
+                   	stmtSujet = conn.prepareStatement(querySujet);
+                    stmtSujet.setString(1, titre);
+                    stmtSujet.setString(2, contenu);
+                    stmtSujet.setInt(3, Integer.parseInt(idCategorie));
+                    stmtSujet.setInt(4, Integer.parseInt(idUser));
+                    
+                    rsSujets = stmtSujet.executeQuery();
+                    	
+                        if (rsSujets.next()) {                            	
+                        	sujetId = rsSujets.getString("id_sujet");
                         }
-                    }
-                }
-            }
+                    
+                }                
             response.sendRedirect("sujet?id=" + sujetId);
 
         } catch (SQLException e) {
@@ -83,6 +88,11 @@ public class CreationSubjectServlet extends HttpServlet {
         } catch (Exception e) {
             e.printStackTrace();
             response.sendRedirect("error.jsp");
+        }finally {
+            // Fermeture des ressources dans l'ordre inverse de leur ouverture
+            try { if (rsSujets != null) rsSujets.close(); } catch (SQLException ignored) {}
+            try { if (stmtSujet != null) stmtSujet.close(); } catch (SQLException ignored) {}
+            try { if (conn != null) conn.close(); } catch (SQLException ignored) {}
         }
     }
 }

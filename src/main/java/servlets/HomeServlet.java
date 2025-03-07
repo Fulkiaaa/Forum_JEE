@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.RequestDispatcher;
@@ -19,10 +20,14 @@ import models.User;
 public class HomeServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) 
             throws ServletException, IOException {
-        
+    	Connection conn = null;
+    	PreparedStatement stmt = null;
+    	ResultSet rs = null;
+    	
         ArrayList<Subject> subjects = new ArrayList<>();
         
-        try (Connection conn = DBConnection.getConnection()) {
+        try {
+        	conn = DBConnection.getConnection();
             // Requête pour récupérer les 3 derniers sujets
             String query = "SELECT s.id_sujet, s.titre_sujet, s.contenu_sujet, s.date_creation, " +
                            "c.id_categorie, c.nom_categorie, " +
@@ -32,8 +37,8 @@ public class HomeServlet extends HttpServlet {
                            "INNER JOIN utilisateurs u ON s.id_utilisateur = u.id_utilisateur " +
                            "ORDER BY s.date_creation DESC LIMIT 3";
             
-            PreparedStatement stmt = conn.prepareStatement(query);
-            ResultSet rs = stmt.executeQuery();
+            stmt = conn.prepareStatement(query);
+            rs = stmt.executeQuery();
 
             System.out.println("Requête préparée : " + stmt.toString());
 
@@ -62,6 +67,11 @@ public class HomeServlet extends HttpServlet {
         } catch (Exception e) {
             e.printStackTrace();
             response.sendRedirect("error.jsp");
-        }
+        }finally {
+            // Fermeture des ressources dans l'ordre inverse de leur ouverture
+            try { if (rs != null) rs.close(); } catch (SQLException ignored) {}
+            try { if (stmt != null) stmt.close(); } catch (SQLException ignored) {}
+            try { if (conn != null) conn.close(); } catch (SQLException ignored) {}
+        }	
     }
 }

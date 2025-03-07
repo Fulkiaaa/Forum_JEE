@@ -3,6 +3,8 @@ package servlets;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Timestamp;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
@@ -16,7 +18,9 @@ import models.User;
 public class CreationMessageServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) 
             throws ServletException, IOException {
-        
+    	Connection conn = null;
+    	PreparedStatement stmt = null;
+    	
         // Vérifier si l'utilisateur est connecté
         User utilisateur = (User) request.getSession().getAttribute("user");
         if (utilisateur == null) {
@@ -32,9 +36,11 @@ public class CreationMessageServlet extends HttpServlet {
             return;
         }
 
-        try (Connection conn = DBConnection.getConnection()) {
+        try {
+        	conn = DBConnection.getConnection();
+        			
             String query = "INSERT INTO messages (contenu_message, date_creation, id_sujet, id_utilisateur) VALUES (?, ?, ?, ?)";
-            PreparedStatement stmt = conn.prepareStatement(query);
+            stmt = conn.prepareStatement(query);
             stmt.setString(1, contenu);
             stmt.setTimestamp(2, new Timestamp(System.currentTimeMillis()));
             stmt.setInt(3, Integer.parseInt(idSujet));
@@ -46,6 +52,10 @@ public class CreationMessageServlet extends HttpServlet {
         } catch (Exception e) {
             e.printStackTrace();
             response.sendRedirect("error.jsp");
-        }
+        }finally {
+            // Fermeture des ressources dans l'ordre inverse de leur ouverture
+            try { if (stmt != null) stmt.close(); } catch (SQLException ignored) {}
+            try { if (conn != null) conn.close(); } catch (SQLException ignored) {}
+        }	
     }
 }

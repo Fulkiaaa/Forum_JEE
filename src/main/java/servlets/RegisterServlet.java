@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import javax.crypto.Cipher;
@@ -22,7 +23,9 @@ public class RegisterServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        
+    	Connection conn = null;
+    	PreparedStatement stmt = null;
+    	
         // Récupérer les paramètres du formulaire d'inscription
         String username = request.getParameter("username");
         String email = request.getParameter("email");
@@ -44,11 +47,11 @@ public class RegisterServlet extends HttpServlet {
 
         try {
             // Connexion à la base de données
-            Connection conn = DBConnection.getConnection();
+            conn = DBConnection.getConnection();
 
             // Requête d'insertion dans la base de données
             String query = "INSERT INTO utilisateurs (nom_utilisateur, mot_de_passe, email) VALUES (?, ?, ?)";
-            PreparedStatement stmt = conn.prepareStatement(query);
+            stmt = conn.prepareStatement(query);
             stmt.setString(1, user.getUsername());
             stmt.setString(2, pwd);  // Insérer le mot de passe sans hashage
             stmt.setString(3, user.getEmail());
@@ -68,6 +71,10 @@ public class RegisterServlet extends HttpServlet {
             e.printStackTrace();
             request.setAttribute("errorMessage", "Erreur serveur : " + e.getMessage());
             request.getRequestDispatcher("register.jsp").forward(request, response);
-        }
+        }finally {
+            // Fermeture des ressources dans l'ordre inverse de leur ouverture
+            try { if (stmt != null) stmt.close(); } catch (SQLException ignored) {}
+            try { if (conn != null) conn.close(); } catch (SQLException ignored) {}
+        }	
     }
 }

@@ -26,6 +26,12 @@ import models.Message;
 public class SujetServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) 
             throws ServletException, IOException {
+    	Connection conn = null;
+    	PreparedStatement stmtSujet = null;
+    	PreparedStatement stmtMessages = null;
+    	ResultSet rsSujet = null;
+    	ResultSet rsMessages = null;
+    	
         String idSujet = request.getParameter("id");
         if(idSujet == null) {
         	idSujet = (String)request.getAttribute("id");
@@ -39,7 +45,8 @@ public class SujetServlet extends HttpServlet {
         Subject sujet = null;
         ArrayList<Message> messages = new ArrayList<>();
         
-        try (Connection conn = DBConnection.getConnection()) {
+        try {
+        	conn = DBConnection.getConnection();
             // Récupérer le sujet avec son auteur et sa catégorie
             String querySujet = "SELECT s.id_sujet, s.titre_sujet, s.contenu_sujet, s.date_creation, " +
                                 "c.id_categorie, c.nom_categorie, " +
@@ -49,9 +56,9 @@ public class SujetServlet extends HttpServlet {
                                 "INNER JOIN utilisateurs u ON s.id_utilisateur = u.id_utilisateur " +
                                 "WHERE s.id_sujet = ?";
             
-            PreparedStatement stmtSujet = conn.prepareStatement(querySujet);
+            stmtSujet = conn.prepareStatement(querySujet);
             stmtSujet.setInt(1, Integer.parseInt(idSujet));
-            ResultSet rsSujet = stmtSujet.executeQuery();
+            rsSujet = stmtSujet.executeQuery();
             
             if (rsSujet.next()) {
                 Category categorie = new Category(rsSujet.getInt("id_categorie"), rsSujet.getString("nom_categorie"));
@@ -83,9 +90,9 @@ public class SujetServlet extends HttpServlet {
                                    "INNER JOIN utilisateurs u ON m.id_utilisateur = u.id_utilisateur " +
                                    "WHERE m.id_sujet = ? ORDER BY m.date_creation ASC";
             
-            PreparedStatement stmtMessages = conn.prepareStatement(queryMessages);
+            stmtMessages = conn.prepareStatement(queryMessages);
             stmtMessages.setInt(1, Integer.parseInt(idSujet));
-            ResultSet rsMessages = stmtMessages.executeQuery();
+            rsMessages = stmtMessages.executeQuery();
 
             while (rsMessages.next()) {
                 User auteurMessage = new User(
@@ -112,6 +119,13 @@ public class SujetServlet extends HttpServlet {
         } catch (Exception e) {
             e.printStackTrace();
             response.sendRedirect("error.jsp");
-        }
+        }finally {
+            // Fermeture des ressources dans l'ordre inverse de leur ouverture
+            try { if (rsSujet != null) rsSujet.close(); } catch (SQLException ignored) {}
+            try { if (rsMessages != null) rsMessages.close(); } catch (SQLException ignored) {}
+            try { if (stmtSujet != null) stmtSujet.close(); } catch (SQLException ignored) {}
+            try { if (stmtMessages != null) stmtMessages.close(); } catch (SQLException ignored) {}
+            try { if (conn != null) conn.close(); } catch (SQLException ignored) {}
+        }	
     }
 }

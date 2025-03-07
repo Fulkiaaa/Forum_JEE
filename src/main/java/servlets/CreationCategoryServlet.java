@@ -26,7 +26,11 @@ import utils.DBConnection;
 public class CreationCategoryServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) 
             throws ServletException, IOException {     
-
+		Connection conn = null;
+    	PreparedStatement stmtInsertSubject = null;
+    	PreparedStatement stmtSujet = null;
+    	ResultSet rsSujets = null;
+    	
 		HttpSession session = request.getSession();
         
 		User user = (User) request.getSession().getAttribute("user");
@@ -50,30 +54,27 @@ public class CreationCategoryServlet extends HttpServlet {
         }
 
         String categoryId = null;
-        try (Connection conn = DBConnection.getConnection()) {
+        try {
+        	conn = DBConnection.getConnection();
             String queryInsertSubject = "INSERT INTO categories (nom_categorie) VALUES (?);";
-            try (PreparedStatement stmtInsertSubject = conn.prepareStatement(queryInsertSubject)) {
-                stmtInsertSubject.setString(1, nameCategory);
-                
-                int rowsAffected = stmtInsertSubject.executeUpdate();
-
-                if (rowsAffected > 0) {
-                    String querySujet = "SELECT id_categorie FROM categories WHERE nom_categorie = ?";
-                    try (PreparedStatement stmtSujet = conn.prepareStatement(querySujet)) {
-                        stmtSujet.setString(1, nameCategory);
-                        
-                        try (ResultSet rsSujets = stmtSujet.executeQuery()) {
-                        	
-                            if (rsSujets.next()) {                            	
-                            	categoryId = rsSujets.getString("id_categorie");
-                            }
-                        }
-                    }
-                }
-            }
+          
+        	stmtInsertSubject  = conn.prepareStatement(queryInsertSubject);
+            stmtInsertSubject.setString(1, nameCategory);
             
-            // Redirection vers la page précédente
-            response.sendRedirect("category?id=" + categoryId);
+            int rowsAffected = stmtInsertSubject.executeUpdate();
+
+            if (rowsAffected > 0) {
+                String querySujet = "SELECT id_categorie FROM categories WHERE nom_categorie = ?";
+                stmtSujet = conn.prepareStatement(querySujet);
+                stmtSujet.setString(1, nameCategory);
+            	rsSujets = stmtSujet.executeQuery();
+                if (rsSujets.next()) {                            	
+                	categoryId = rsSujets.getString("id_categorie");
+                }
+             }           
+                
+             // Redirection vers la page précédente
+             response.sendRedirect("category?id=" + categoryId);
             
         } catch (SQLException e) {
             e.printStackTrace();
@@ -81,6 +82,11 @@ public class CreationCategoryServlet extends HttpServlet {
         } catch (Exception e) {
             e.printStackTrace();
             response.sendRedirect("error.jsp");
-        }
-    }
+        }finally {
+            // Fermeture des ressources dans l'ordre inverse de leur ouverture
+            try { if (rsSujets != null) rsSujets.close(); } catch (SQLException ignored) {}
+            try { if (stmtSujet != null) stmtSujet.close(); } catch (SQLException ignored) {}
+            try { if (conn != null) conn.close(); } catch (SQLException ignored) {}
+        }	
+	}
 }
