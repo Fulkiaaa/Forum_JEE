@@ -1,5 +1,5 @@
 BDD => Maxime
-Acceuil => Acceuil
+Acceuil => Brice
 Sujet/CreationMessage => Clara
 Catégorie/CreationSujet => Maëva
 Header/Footer => ElHosain

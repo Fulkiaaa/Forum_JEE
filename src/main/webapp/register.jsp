@@ -9,12 +9,15 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="assets/css/styles.css">
 </head>
-<body class="d-flex justify-content-center align-items-center vh-100">
+<body class="d-flex justify-content-center align-items-center vh-100" style="background-color: #212529;">
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-md-4">
                 <div class="card shadow-lg">
                     <div class="card-header text-center">
+                    <a href="/Forum_JEE/" class="position-absolute start-0 ms-3 text-dark">
+    					<i class="fas fa-arrow-left fa-2x"></i>
+					</a>
                         <h3>Inscription</h3>
                     </div>
                     <div class="card-body">
